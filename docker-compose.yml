@@ -1,4 +1,6 @@
-version: "3.7"
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.7'
 
 services:
   auth-service:
@@ -6,16 +8,14 @@ services:
     image: ${DOCKER_REGISTRY-}auth-service
     build:
       context: .
-      dockerfile: AuthService.API/Dockerfile
+      dockerfile: src/AuthService.API/Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - auth_service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
-      - COMPlus_EnableDiagnostics=1
-    ports:
-      - 5000:5000
-    entrypoint:
-      - dotnet
-      - AuthService.API.dll
     depends_on:
       - postgres
 
@@ -36,6 +36,8 @@ services:
 
 networks:
   postgres:
+    driver: bridge
+  auth_service:
     driver: bridge
 
 volumes:
