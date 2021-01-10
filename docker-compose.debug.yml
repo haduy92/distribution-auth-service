@@ -10,9 +10,19 @@ services:
       context: .
       dockerfile: src/AuthService.API/Dockerfile
     ports:
-      - 5000:5000
+      - 5000:80
+      - 5001:443
     networks:
       - auth_service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    restart: always
+
+networks:
+  auth_service:
+    driver: bridge

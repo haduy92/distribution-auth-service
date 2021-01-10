@@ -16,29 +16,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
-    depends_on:
-      - postgres
-
-  postgres:
-    container_name: postgres
-    image: postgres:13.1
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
-      PGDATA: /var/lib/postgres/data
-    volumes:
-      - postgres:/var/lib/postgres/data
-    ports:
-      - 5432:5432
-    networks:
-      - postgres
-    restart: always
 
 networks:
-  postgres:
-    driver: bridge
   auth_service:
     driver: bridge
-
-volumes:
-  postgres:
